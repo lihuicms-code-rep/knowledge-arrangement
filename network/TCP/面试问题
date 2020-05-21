@@ -1,0 +1,31 @@
+1.所创建的fd(socket)与TCP/IP协议栈之间有什么关系?
+  fd,socket,网络io,表述的是同一个含义
+  从三次握手开始
+  tcp的控制块tcb
+
+  客户端                    服务器
+  1.客户端发起连接           状态:listen
+    syn seq=12345
+  2.服务器收到后             此时服务器会产生一个节点:tcb,同时有一个syn队列
+    发送给客户端:
+    ack acknum=12346
+    syn seq = 221
+  3.客户端收到后
+    发送给服务器             此时服务器会产生accept队列, clientfd = accept(),从accept中取出一个节点分配一个fd
+    ack acknum = 222
+
+  五元组(sip,dip,sport,dport,proto) ====> tcb
+  调用send/write
+  用户态buffer--->tcb.sendbuffer
+  调用recv
+  tcb.recvbuffer -> buffer用户态
+2.tcp如何学习
+  1)tcp详解,卷
+  2)对比tcp源码,linux中tcp.c
+  3)多跟人沟通
+3.tcp如何保证顺序传输
+  延迟ack
+  udp的可靠传输(发送确认消息),  以游戏的团战为例, 实时性，通过牺牲效率
+  udp可靠传输的框架(kcp/udt)
+4.慢启动,拥塞控制
+
